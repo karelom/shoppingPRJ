@@ -1,10 +1,10 @@
 <template>
-    <div>这里是商品标题的子组件</div>
+    $END$
 </template>
 
 <script>
     export default {
-        name: "Title"
+        name: "Header"
     }
 </script>
 
