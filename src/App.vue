@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <h1>This is the beginning page!!!!</h1>
+    <router-view class="main"></router-view>
   </div>
 </template>
 

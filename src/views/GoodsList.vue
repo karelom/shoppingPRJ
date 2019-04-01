@@ -1,19 +1,88 @@
 <template>
+<!--  这里是商品列表页面的基本样式  download -->
     <div>
-      这是商品列表页面
-      <span>{{ $route.params.goodsId }}  {{ $route.params.name}}</span><br>
-      <router-link to="/goods/title">显示商品标题</router-link>
-         <!--      这里要写绝对子地址-->
-      <router-link to="/goods/img">显示商品图片</router-link>
-      <div>
-        <router-view></router-view>
+      <nav-header></nav-header>
+      <nav-bread>
+        <span>Goods</span>
+      </nav-bread>
+      <div class="accessory-result-page accessory-page">
+        <div class="container">
+          <div class="filter-nav">
+            <span class="sortby">Sort by:</span>
+            <a href="javascript:void(0)" class="default cur">Default</a>
+            <a href="javascript:void(0)" class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+            <a href="javascript:void(0)" class="filterby stopPop">Filter by</a>
+          </div>
+          <div class="accessory-result">
+            <!-- filter -->
+            <div class="filter stopPop" id="filter">
+              <dl class="filter-price">
+                <dt>Price:</dt>
+                <dd><a href="javascript:void(0)">All</a></dd>
+                <dd>
+                  <a href="javascript:void(0)">0 - 100</a>
+                </dd>
+              </dl>
+            </div>
+
+            <!-- search result accessories list -->
+            <div class="accessory-list-wrap">
+              <div class="accessory-list col-4">
+                <ul>
+                  <li>
+                    <div class="pic">
+                      <a href="#"><img src="/static/1.jpg" alt=""></a>
+                    </div>
+                    <div class="main">
+                      <div class="name">XX</div>
+                      <div class="price">XX</div>
+                      <div class="btn-area">
+                        <a href="javascript:;" class="btn btn--m">加入购物车</a>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      <nav-footer></nav-footer>
+
     </div>
 </template>
 
 <script>
+  import './../assets/css/base.css'
+  import './../assets/css/product.css'
+  import  NavHeader from '@/components/Header.vue'
+  import  NavFooter from '@/components/NavFooter.vue'
+  import  NavBread from '@/components/NavBread.vue'
+  import axios from 'axios'
     export default {
-        name: "GoodsList.vue"
+        name: "GoodsList.vue",
+      data(){
+          return{
+            goodsList:[]
+          }
+      },
+      components:{
+          NavHeader,    //单独写表示key和value一样
+          NavFooter,
+          NavBread
+      },
+      mounted: function () {
+        this.getGoodsList();
+      },
+      methods:{
+        getGoodsList(){
+          axios.get("/goods").then((result)=>{
+            var res = result.data;
+            this.goodsList = res.result;
+          })
+        }
+
+      }
     }
 </script>
 

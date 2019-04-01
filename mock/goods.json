@@ -1,0 +1,24 @@
+{
+  "status": "0",
+  "msg": "",
+  "result": [
+    {
+      "productId": "1000001",
+      "productName": "Listener",
+      "productPrice": 2499,
+      "productImg": "1.jpg"
+    },
+    {
+      "productId": "1000002",
+      "productName": "Laptop",
+      "productPrice": 10000,
+      "productImg": "2.jpg"
+    },
+    {
+      "productId": "1000003",
+      "productName": "Ipad",
+      "productPrice": 9999,
+      "productImg": "3.jpg"
+    }
+  ]
+}
