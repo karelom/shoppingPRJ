@@ -50,7 +50,6 @@
       </div>
       <div class="md-overlay" v-show="overLayFlag" @click="closePop"></div>
       <nav-footer></nav-footer>
-
     </div>
 </template>
 
@@ -152,6 +151,7 @@
             }
           } else {
             this.getGoodsList()
+            this.priceText='Price'
           }
         },
         sortDefault() {
@@ -172,7 +172,6 @@
           this.sortFlag = !this.sortFlag
           // console.log(this.sortFlag);
         }
-
       }
     }
 </script>
