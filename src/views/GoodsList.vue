@@ -66,20 +66,20 @@
           return{
             goodsList:[],
             sortFlag:true,
-            page:1,
-            pageSize:8,
+            // page:1,
+            // pageSize:8,
             priceFilter:[
               {
                 startPrice:'0.00',
-                endPrice:'500.00'
+                endPrice:'50.00'
               },
               {
-                startPrice:'500.00',
-                endPrice:'1000.00'
+                startPrice:'50.00',
+                endPrice:'100.00'
               },
               {
-                startPrice:'1000.00',
-                endPrice:'2000.00'
+                startPrice:'100.00',
+                endPrice:'200.00'
               }
             ],
             priceChecked:'all',
@@ -113,6 +113,41 @@
         setPriceFilter(index){
           this.priceChecked=index;
           this.closePop();
+          // this.getGoodsList();
+          if (!(this.priceChecked === 'all')){
+            switch (this.priceChecked) {
+              case 0:
+                // console.log("执行了");
+                // this.goodsList = this.goodsList.filter(function(item){
+                //   return (item.regularPrice>=0) &&(item.regularPrice<=100)
+                // });
+                axios.get("https://api.bestbuy.com/v1/products(salePrice<=50)?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                  let res = result.data;
+                  this.goodsList = res.products;
+                })
+                break;
+              case 1:
+                // this.goodsList = this.goodsList.filter(function(item){
+                //   return (item.regularPrice>=100) && (item.regularPrice<=200)
+                // });
+                axios.get("https://api.bestbuy.com/v1/products(salePrice>50 & salePrice<=100)?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                  let res = result.data;
+                  this.goodsList = res.products;
+                })
+                break;
+              case 2:
+                // this.goodsList = this.goodsList.filter(function(item){
+                //   return (item.regularPrice>=200) &&(item.regularPrice<=300)
+                // });
+                axios.get("https://api.bestbuy.com/v1/products(salePrice>100 & salePrice<=200)?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                  let res = result.data;
+                  this.goodsList = res.products;
+                })
+                break;
+            }
+          }
+
+
         },
         sortGoods(){
           function sortSale(a,b){
@@ -121,7 +156,7 @@
           function sortSaleD(a,b){
             return b.regularPrice-a.regularPrice;
           }
-          console.log(this.sortFlag);
+          // console.log(this.sortFlag);
           //利用js中的sort方法
           if (this.sortFlag) {
             this.goodsList.sort(sortSale);
@@ -131,10 +166,7 @@
           }
 
           this.sortFlag = !this.sortFlag;
-          console.log(this.sortFlag);
-
-
-
+          // console.log(this.sortFlag);
         }
 
       }
