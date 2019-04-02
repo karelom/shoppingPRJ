@@ -1,7 +1,9 @@
 <template>
 <!--  这里是商品列表页面的基本样式  download -->
     <div>
-      <nav-header></nav-header>
+      <nav-header>
+
+      </nav-header>
       <nav-bread>
         <span>Goods</span>
       </nav-bread>
@@ -56,6 +58,7 @@
 <script>
   import './../assets/css/base.css'
   import './../assets/css/product.css'
+  import './../assets/css/login.css'
   import  NavHeader from '@/components/Header.vue'
   import  NavFooter from '@/components/NavFooter.vue'
   import  NavBread from '@/components/NavBread.vue'
