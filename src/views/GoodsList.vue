@@ -25,7 +25,7 @@
             <div class="filter stopPop" id="filter" v-bind:class="{'filterby-show':filterBy}">
               <dl class="filter-price">
                 <dt>Price:</dt>
-                <dd><a href="javascript:void(0)" v-bind:class="{'cur':priceChecked=='all'}" @click="priceChecked='all'">All</a></dd>
+                <dd><a href="javascript:void(0)" v-bind:class="{'cur':priceChecked=='all'}" @click="setDefault">All</a></dd>
                 <dd v-for="(price,index) in priceFilter">
                   <a href="javascript:void(0)" @click="setPriceFilter(index)" v-bind:class="{'cur':priceChecked==index}">{{price.startPrice}} - {{price.endPrice}}</a>
                 </dd>
@@ -123,6 +123,7 @@
         selectChange() {
           this.getGoodsList()
           this.priceText = 'Price'
+          this.priceChecked = 'all'
         },
         getGoodsList() {
           axios.get("https://api.bestbuy.com/v1/products((categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=50&format=json").then((result)=>{
@@ -141,8 +142,13 @@
           this.filterBy=false
           this.overLayFlag=false
         },
+        setDefault() {
+          this.getGoodsList()
+          this.priceText='Price'
+          this.priceChecked = 'all'
+        },
         setPriceFilter(index) {
-          this.priceChecked=index
+          this.priceChecked = index
           this.closePop()
           // this.getGoodsList();
             switch (this.priceChecked) {
@@ -198,9 +204,7 @@
                 this.priceText='Price'
                 break;
               default:
-                console.log("i am allllll")
-                this.getGoodsList()
-                this.priceText='Price'
+                break;
             }
           },
         sortDefault() {
