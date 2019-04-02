@@ -10,7 +10,7 @@
           <div class="filter-nav">
             <span class="sortby">Sort by:</span>
             <a href="javascript:void(0)" class="default cur">Default</a>
-            <a href="javascript:void(0)" class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+            <a @click="sortGoods" href="javascript:void(0)" class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
             <a href="javascript:void(0)" class="filterby stopPop" @click="showFilterPop">Filter by</a>
           </div>
           <div class="accessory-result">
@@ -31,13 +31,13 @@
                 <ul>
                   <li v-for="(item,index) in goodsList">
                     <div class="pic">
-                      <a href="#"><img v-lazy="'/static/'+item.productImg" alt=""></a>
+                      <a href="/"><img v-bind:src=item.image alt=""></a>
                     </div>
                     <div class="main">
-                      <div class="name">{{item.productName}}</div>
-                      <div class="price">{{item.productPrice}}</div>
+                      <div class="name">{{item.name}}</div>
+                      <div class="price">€{{item.regularPrice}}</div>
                       <div class="btn-area">
-                        <a href="javascript:;" class="btn btn--m">加入购物车</a>
+                        <a href="javascript:;" class="btn btn--m">Add to chat</a>
                       </div>
                     </div>
                   </li>
@@ -65,6 +65,9 @@
       data(){
           return{
             goodsList:[],
+            sortFlag:true,
+            page:1,
+            pageSize:8,
             priceFilter:[
               {
                 startPrice:'0.00',
@@ -94,9 +97,9 @@
       },
       methods:{
         getGoodsList(){
-          axios.get("/goods").then((result)=>{
-            var res = result.data;
-            this.goodsList = res.result;
+          axios.get("https://api.bestbuy.com/v1/products?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=50&format=json").then((result)=>{
+            let res = result.data;
+            this.goodsList = res.products;
           })
         },
         showFilterPop(){
@@ -110,6 +113,28 @@
         setPriceFilter(index){
           this.priceChecked=index;
           this.closePop();
+        },
+        sortGoods(){
+          function sortSale(a,b){
+              return a.regularPrice-b.regularPrice;
+          }
+          function sortSaleD(a,b){
+            return b.regularPrice-a.regularPrice;
+          }
+          console.log(this.sortFlag);
+          //利用js中的sort方法
+          if (this.sortFlag) {
+            this.goodsList.sort(sortSale);
+          }
+          if (!this.sortFlag){
+            this.goodsList.sort(sortSaleD);
+          }
+
+          this.sortFlag = !this.sortFlag;
+          console.log(this.sortFlag);
+
+
+
         }
 
       }
