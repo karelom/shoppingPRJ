@@ -29,8 +29,8 @@
             <div class="navbar-right-container" style="display: flex;">
               <div class="navbar-menu-container">
                 <span class="navbar-link" v-text="nickName" v-if="nickName"></span>
-                <a href="javascript:void(0)" class="navbar-link" @click="loginModalFlag=true" v-if="!nickName">Login</a>
-                <a href="javascript:void(0)" class="navbar-link" @click="logOut" v-else>Logout</a>
+                <a href="javascript:void(0)" class="navbar-link" @click="loginModalFlag=true" v-if="!userlogin">Login</a>
+                <a href="javascript:void(0)" class="navbar-link" @click="logOut" v-else>Welcome, {{ userName }}! Logout</a>
                 <div class="navbar-cart-container">
                   <a class="navbar-link navbar-cart-link" href="/#/cart">
                     <svg class="navbar-cart-logo">
@@ -64,7 +64,7 @@
                 </ul>
               </div>
               <div class="login-wrap">
-                <a href="javascript:;" class="btn-login" @click="login">登  录</a>
+                <a href="javascript:;" class="btn-login" @click="login">登   錄</a>
               </div>
             </div>
           </div>
@@ -74,10 +74,18 @@
 </template>
 
 <script>
+    import './../assets/css/login.css'
+    import axios from 'axios'
     export default {
       name: "Header.vue",
       data() {
         return {
+          // users account
+          users: [
+            { name: 'david', pw: '1234'},
+            { name: 'test', pw: '0000'}
+          ],
+          userlogin: false,
           userName: '',
           userPwd: '',
           nickName: '',
@@ -87,18 +95,26 @@
       },
       methods:{
         login() {
-          axios.post("/userXXX",{
-            userName: this.userName,
-            userPW: this.userPW
-          }).then((response) => {
-            let res = response.data
-            if (res.status == "0") {
-              this.errorTip = false
-              //todo
-            } else {
-              this.errorTip = true
+          console.log(this.userName + " " + this.userPwd)
+          var success = false
+          for (const key in this.users) {
+            if (this.userName == this.users[key].name) {
+              if (this.userPwd == this.users[key].pw) {
+                success = true
+                this.errorTip = false
+                this.loginModalFlag = false
+                this.userlogin = true
+              }// login success
             }
-          })
+          }
+          if (success == false) {
+            this.errorTip = true
+          }// login fail
+          this.userPwd = ""
+        },
+        logOut() {
+          this.userName = ""
+          this.userlogin = false
         }
       }
     }
