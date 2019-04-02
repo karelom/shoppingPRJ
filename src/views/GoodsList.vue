@@ -9,8 +9,9 @@
         <div class="container">
           <div class="filter-nav">
             <span class="sortby">Sort by:</span>
-            <a href="javascript:void(0)" class="default cur">Default</a>
-            <a @click="sortGoods" href="javascript:void(0)" class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+            <a @click="sortDefault" href="javascript:void(0)" class="default cur">Default</a>
+            <a @click="sortGoods" href="javascript:void(0)" class="price" >
+              {{ priceText }} <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
             <a href="javascript:void(0)" class="filterby stopPop" @click="showFilterPop">Filter by</a>
           </div>
           <div class="accessory-result">
@@ -19,7 +20,7 @@
               <dl class="filter-price">
                 <dt>Price:</dt>
                 <dd><a href="javascript:void(0)" v-bind:class="{'cur':priceChecked=='all'}" @click="priceChecked='all'">All</a></dd>
-                <dd v-for="(price,index) in priceFilter" >
+                <dd v-for="(price,index) in priceFilter">
                   <a href="javascript:void(0)" @click="setPriceFilter(index)" v-bind:class="{'cur':priceChecked==index}">{{price.startPrice}} - {{price.endPrice}}</a>
                 </dd>
               </dl>
@@ -65,6 +66,7 @@
       data(){
           return{
             goodsList:[],
+            priceText: 'Price',
             sortFlag:true,
             // page:1,
             // pageSize:8,
@@ -93,28 +95,28 @@
           NavBread
       },
       mounted: function () {
-        this.getGoodsList();
+        this.getGoodsList()
       },
       methods:{
-        getGoodsList(){
+        getGoodsList() {
           axios.get("https://api.bestbuy.com/v1/products?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=50&format=json").then((result)=>{
-            let res = result.data;
-            this.goodsList = res.products;
+            let res = result.data
+            this.goodsList = res.products
           })
         },
-        showFilterPop(){
-          this.filterBy=true;
-          this.overLayFlag=true;
+        showFilterPop() {
+          this.filterBy=true
+          this.overLayFlag=true
         },
-        closePop(){
-          this.filterBy=false;
-          this.overLayFlag=false;
+        closePop() {
+          this.filterBy=false
+          this.overLayFlag=false
         },
-        setPriceFilter(index){
-          this.priceChecked=index;
-          this.closePop();
+        setPriceFilter(index) {
+          this.priceChecked=index
+          this.closePop()
           // this.getGoodsList();
-          if (!(this.priceChecked === 'all')){
+          if (!(this.priceChecked === 'all')) {
             switch (this.priceChecked) {
               case 0:
                 // console.log("执行了");
@@ -125,6 +127,7 @@
                   let res = result.data;
                   this.goodsList = res.products;
                 })
+                this.priceText='Price'
                 break;
               case 1:
                 // this.goodsList = this.goodsList.filter(function(item){
@@ -134,6 +137,7 @@
                   let res = result.data;
                   this.goodsList = res.products;
                 })
+                this.priceText='Price'
                 break;
               case 2:
                 // this.goodsList = this.goodsList.filter(function(item){
@@ -143,29 +147,29 @@
                   let res = result.data;
                   this.goodsList = res.products;
                 })
+                this.priceText='Price'
                 break;
             }
+          } else {
+            this.getGoodsList()
           }
-
-
         },
-        sortGoods(){
-          function sortSale(a,b){
-              return a.regularPrice-b.regularPrice;
-          }
-          function sortSaleD(a,b){
-            return b.regularPrice-a.regularPrice;
-          }
+        sortDefault() {
+          this.getGoodsList()
+          this.priceText='Price'
+        },
+        sortGoods() {
           // console.log(this.sortFlag);
-          //利用js中的sort方法
+          // 利用js中的sort方法
           if (this.sortFlag) {
-            this.goodsList.sort(sortSale);
+            this.goodsList.sort((a,b) => { return a.regularPrice-b.regularPrice })
+            this.priceText='Price:ASC'
           }
-          if (!this.sortFlag){
-            this.goodsList.sort(sortSaleD);
+          if (!this.sortFlag) {
+            this.goodsList.sort((a,b) => { return b.regularPrice-a.regularPrice })
+            this.priceText='Price:DES'
           }
-
-          this.sortFlag = !this.sortFlag;
+          this.sortFlag = !this.sortFlag
           // console.log(this.sortFlag);
         }
 
