@@ -10,6 +10,10 @@
       <div class="accessory-result-page accessory-page">
         <div class="container">
           <div class="filter-nav">
+            <select v-model="userSearch" @change="selectChange">
+              <option v-for="list in itemLists" :value="list.key">{{ list.item }}</option>
+            </select>
+            <input style="position: absolute; left: 30px; top: 230px;" v-model="userSearch">
             <span class="sortby">Sort by:</span>
             <a @click="sortDefault" href="javascript:void(0)" class="default cur">Default</a>
             <a @click="sortGoods" href="javascript:void(0)" class="price" >
@@ -67,6 +71,14 @@
         name: "GoodsList.vue",
       data(){
           return{
+            userSearch: "abcat0204000",
+            itemLists: [
+              { item: 'Headphone', key:'abcat0204000' },
+              { item: 'Digital Cameras', key: 'abcat0401000' },
+              { item: 'All Cell Phones with Plans', key: 'pcmcat209400050001' },
+              { item: 'Laptops', key: 'abcat0502000' },
+              { item: 'TVs', key: 'abcat0101000' }
+            ],
             goodsList:[],
             priceText: 'Price',
             sortFlag:true,
@@ -84,6 +96,13 @@
               {
                 startPrice:'100.00',
                 endPrice:'200.00'
+              },
+              {
+                startPrice:'200.00',
+                endPrice:'500.00'
+              },
+              {
+                startPrice:'500.00 up'
               }
             ],
             priceChecked:'all',
@@ -100,10 +119,17 @@
         this.getGoodsList()
       },
       methods:{
+        selectChange() {
+          this.getGoodsList()
+          this.priceText = 'Price'
+        },
         getGoodsList() {
-          axios.get("https://api.bestbuy.com/v1/products?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=50&format=json").then((result)=>{
+          axios.get("https://api.bestbuy.com/v1/products((categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=50&format=json").then((result)=>{
             let res = result.data
             this.goodsList = res.products
+            if (!this.goodList) {
+              console.log("Oops! There is nothing to display.")
+            }
           })
         },
         showFilterPop() {
@@ -118,43 +144,63 @@
           this.priceChecked=index
           this.closePop()
           // this.getGoodsList();
-          if (!(this.priceChecked === 'all')) {
+          if (!(this.priceChecked == 'all')) {
             switch (this.priceChecked) {
               case 0:
                 // console.log("执行了");
-                // this.goodsList = this.goodsList.filter(function(item){
-                //   return (item.regularPrice>=0) &&(item.regularPrice<=100)
-                // });
-                axios.get("https://api.bestbuy.com/v1/products(salePrice<=50)?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                axios.get("https://api.bestbuy.com/v1/products(salePrice<=50&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
                   let res = result.data;
                   this.goodsList = res.products;
+                  if (!this.goodList) {
+                    console.log("Oops! There is nothing to display.")
+                  }
                 })
                 this.priceText='Price'
                 break;
               case 1:
-                // this.goodsList = this.goodsList.filter(function(item){
-                //   return (item.regularPrice>=100) && (item.regularPrice<=200)
-                // });
-                axios.get("https://api.bestbuy.com/v1/products(salePrice>50 & salePrice<=100)?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                axios.get("https://api.bestbuy.com/v1/products(salePrice>50&salePrice<=100&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
                   let res = result.data;
                   this.goodsList = res.products;
+                  if (!this.goodList) {
+                    console.log("Oops! There is nothing to display.")
+                  }
                 })
                 this.priceText='Price'
                 break;
               case 2:
-                // this.goodsList = this.goodsList.filter(function(item){
-                //   return (item.regularPrice>=200) &&(item.regularPrice<=300)
-                // });
-                axios.get("https://api.bestbuy.com/v1/products(salePrice>100 & salePrice<=200)?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                axios.get("https://api.bestbuy.com/v1/products(salePrice>100&salePrice<=200&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
                   let res = result.data;
                   this.goodsList = res.products;
+                  if (!this.goodList) {
+                    console.log("Oops! There is nothing to display.")
+                  }
                 })
                 this.priceText='Price'
                 break;
+              case 3:
+                axios.get("https://api.bestbuy.com/v1/products(salePrice>200&salePrice<=500&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                  let res = result.data;
+                  this.goodsList = res.products;
+                  if (!this.goodList) {
+                    console.log("Oops! There is nothing to display.")
+                  }
+                })
+                this.priceText='Price'
+                break;
+              case 4:
+                axios.get("https://api.bestbuy.com/v1/products(salePrice>500&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                  let res = result.data;
+                  this.goodsList = res.products;
+                  if (!this.goodList) {
+                    console.log("Oops! There is nothing to display.")
+                  }
+                })
+                this.priceText='Price'
+                break;
+              default:
+                this.getGoodsList()
+                this.priceText='Price'
             }
-          } else {
-            this.getGoodsList()
-            this.priceText='Price'
           }
         },
         sortDefault() {
