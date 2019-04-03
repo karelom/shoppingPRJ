@@ -78,7 +78,7 @@
     import axios from 'axios'
     export default {
       name: "Header.vue",
-      data() {
+      data () {
         return {
           // users account
           users: [
@@ -94,12 +94,12 @@
         }
       },
       methods:{
-        login() {
-          console.log(this.userName + " " + this.userPwd)
+        login () {
+          console.log(this.userName + ' ' + this.userPwd)
           var success = false
           for (const key in this.users) {
-            if (this.userName == this.users[key].name) {
-              if (this.userPwd == this.users[key].pw) {
+            if (this.userName === this.users[key].name) {
+              if (this.userPwd === this.users[key].pw) {
                 success = true
                 this.errorTip = false
                 this.loginModalFlag = false
@@ -107,13 +107,13 @@
               }// login success
             }
           }
-          if (success == false) {
+          if (success === false) {
             this.errorTip = true
           }// login fail
-          this.userPwd = ""
+          this.userPwd = ''
         },
-        logOut() {
-          this.userName = ""
+        logOut () {
+          this.userName = ''
           this.userlogin = false
         }
       }

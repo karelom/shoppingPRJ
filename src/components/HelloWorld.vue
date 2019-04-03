@@ -18,11 +18,11 @@ export default {
     }
   },
   methods:{
-    increment(){
-      this.num++;
+    increment () {
+      this.num++
     },
-    decrement(){
-      this.num--;
+    decrement () {
+      this.num--
     }
   }
 }

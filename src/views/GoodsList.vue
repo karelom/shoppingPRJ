@@ -1,9 +1,7 @@
 <template>
 <!--  这里是商品列表页面的基本样式  download -->
     <div>
-      <nav-header>
-
-      </nav-header>
+      <nav-header></nav-header>
       <nav-bread>
         <span>Goods</span>
       </nav-bread>
@@ -73,51 +71,51 @@
   import axios from 'axios'
     export default {
         name: "GoodsList.vue",
-      data(){
-          return{
-            search: "",
-            userSearch: "abcat0204000",
-            itemLists: [
-              { item: 'Headphone', key:'abcat0204000' },
-              { item: 'Digital Cameras', key: 'abcat0401000' },
-              { item: 'All Cell Phones with Plans', key: 'pcmcat209400050001' },
-              { item: 'Laptops', key: 'abcat0502000' },
-              { item: 'TVs', key: 'abcat0101000' },
-              { item: 'Health, Fitness & Beauty', key: 'pcmcat242800050021' }
-            ],
-            goodsList:[],
-            priceText: 'Price',
-            sortFlag:true,
-            // page:1,
-            // pageSize:8,
-            priceFilter:[
-              {
-                startPrice:'0.00',
-                endPrice:'50.00'
-              },
-              {
-                startPrice:'50.00',
-                endPrice:'100.00'
-              },
-              {
-                startPrice:'100.00',
-                endPrice:'200.00'
-              },
-              {
-                startPrice:'200.00',
-                endPrice:'500.00'
-              },
-              {
-                startPrice:'500.00 up'
-              }
-            ],
-            priceChecked:'all',
-            filterBy:false,
-            overLayFlag:false
-          }
+      data () {
+        return{
+          search: "",
+          userSearch: "abcat0204000",
+          itemLists: [
+            { item: 'Headphone', key:'abcat0204000' },
+            { item: 'Digital Cameras', key: 'abcat0401000' },
+            { item: 'All Cell Phones with Plans', key: 'pcmcat209400050001' },
+            { item: 'Laptops', key: 'abcat0502000' },
+            { item: 'TVs', key: 'abcat0101000' },
+            { item: 'Health, Fitness & Beauty', key: 'pcmcat242800050021' }
+          ],
+          goodsList: [],
+          priceText: 'Price',
+          sortFlag: true,
+          // page:1,
+          // pageSize:8,
+          priceFilter:[
+            {
+              startPrice: '0.00',
+              endPrice: '50.00'
+            },
+            {
+              startPrice: '50.00',
+              endPrice: '100.00'
+            },
+            {
+              startPrice: '100.00',
+              endPrice: '200.00'
+            },
+            {
+              startPrice: '200.00',
+              endPrice: '500.00'
+            },
+            {
+              startPrice: '500.00 up'
+            }
+          ],
+          priceChecked: 'all',
+          filterBy: false,
+          overLayFlag: false
+        }
       },
       components:{
-          NavHeader,    //单独写表示key和value一样
+          NavHeader,    // 单独写表示key和value一样
           NavFooter,
           NavBread
       },
@@ -125,45 +123,45 @@
         this.getGoodsList()
       },
       methods:{
-        searchByName(){
-          var name = this.search;
-          var url = "https://api.bestbuy.com/v1/products((search="+name+"))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json";
+        searchByName () {
+          var name = this.search
+          var url = "https://api.bestbuy.com/v1/products((search="+name+"))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json"
           console.log(url);
           axios.get(url).then((result)=>{
-            let res = result.data;
-            this.goodsList = res.products;
+            let res = result.data
+            this.goodsList = res.products
             this.priceText = 'Price'
             this.priceChecked = 'all'
           })
         },
-        selectChange() {
+        selectChange () {
           this.getGoodsList()
           this.priceText = 'Price'
           this.priceChecked = 'all'
         },
-        getGoodsList() {
+        getGoodsList () {
           axios.get("https://api.bestbuy.com/v1/products((categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=50&format=json").then((result)=>{
             let res = result.data
             this.goodsList = res.products
-            if (this.goodsList.length == 0) {
+            if (this.goodsList.length === 0) {
               console.log("Oops! There is nothing to display.")
             }
           })
         },
-        showFilterPop() {
-          this.filterBy=true
-          this.overLayFlag=true
+        showFilterPop () {
+          this.filterBy = true
+          this.overLayFlag = true
         },
-        closePop() {
-          this.filterBy=false
-          this.overLayFlag=false
+        closePop () {
+          this.filterBy = false
+          this.overLayFlag = false
         },
-        setDefault() {
+        setDefault () {
           this.getGoodsList()
-          this.priceText='Price'
+          this.priceText ='Price'
           this.priceChecked = 'all'
         },
-        setPriceFilter(index) {
+        setPriceFilter (index) {
           this.priceChecked = index
           this.closePop()
           // this.getGoodsList();
@@ -171,72 +169,72 @@
               case 0:
                 // console.log("执行了");
                 axios.get("https://api.bestbuy.com/v1/products(regularPrice<=50&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
-                  let res = result.data;
-                  this.goodsList = res.products;
-                  if (this.goodsList.length == 0) {
+                  let res = result.data
+                  this.goodsList = res.products
+                  if (this.goodsList.length === 0) {
                     console.log("Oops! There is nothing to display.")
                   }
                 })
                 this.priceText='Price'
-                break;
+                break
               case 1:
                 axios.get("https://api.bestbuy.com/v1/products(regularPrice>50&regularPrice<=100&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
-                  let res = result.data;
-                  this.goodsList = res.products;
-                  if (this.goodsList.length == 0) {
+                  let res = result.data
+                  this.goodsList = res.products
+                  if (this.goodsList.length === 0) {
                     console.log("Oops! There is nothing to display.")
                   }
                 })
                 this.priceText='Price'
-                break;
+                break
               case 2:
                 axios.get("https://api.bestbuy.com/v1/products(regularPrice>100&regularPrice<=200&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
-                  let res = result.data;
-                  this.goodsList = res.products;
-                  if (this.goodsList.length == 0) {
+                  let res = result.data
+                  this.goodsList = res.products
+                  if (this.goodsList.length === 0) {
                     console.log("Oops! There is nothing to display.")
                   }
                 })
                 this.priceText='Price'
-                break;
+                break
               case 3:
                 axios.get("https://api.bestbuy.com/v1/products(regularPrice>200&regularPrice<=500&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
-                  let res = result.data;
-                  this.goodsList = res.products;
-                  if (this.goodsList.length == 0) {
+                  let res = result.data
+                  this.goodsList = res.products
+                  if (this.goodsList.length === 0) {
                     console.log("Oops! There is nothing to display.")
                   }
                 })
                 this.priceText='Price'
-                break;
+                break
               case 4:
                 axios.get("https://api.bestbuy.com/v1/products(regularPrice>500&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
                   let res = result.data;
                   this.goodsList = res.products;
-                  if (this.goodsList.length == 0) {
+                  if (this.goodsList.length === 0) {
                     console.log("Oops! There is nothing to display.")
                   }
                 })
-                this.priceText='Price'
-                break;
+                this.priceText = 'Price'
+                break
               default:
-                break;
+                break
             }
           },
-        sortDefault() {
+        sortDefault () {
           this.getGoodsList()
-          this.priceText='Price'
+          this.priceText = 'Price'
         },
-        sortGoods() {
+        sortGoods () {
           // console.log(this.sortFlag);
           // 利用js中的sort方法
           if (this.sortFlag) {
             this.goodsList.sort((a,b) => { return a.regularPrice-b.regularPrice })
-            this.priceText='Price:ASC'
+            this.priceText = 'Price:ASC'
           }
           if (!this.sortFlag) {
             this.goodsList.sort((a,b) => { return b.regularPrice-a.regularPrice })
-            this.priceText='Price:DES'
+            this.priceText = 'Price:DES'
           }
           this.sortFlag = !this.sortFlag
           // console.log(this.sortFlag);

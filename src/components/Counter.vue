@@ -9,22 +9,19 @@
 <script>
     export default {
         props:['num1'],   //在子组件中声获取父组件的数据
-        name: "Counter",
-      data(){
-          return{
-          }
+        name: 'Counter',
+      data () {
+        return{
+        }
       },
       methods:{
-          increment(){
-            this.$emit("incr");  //用$emit方法调用父组件中的方法
-
+          increment () {
+            this.$emit('incr')  //用$emit方法调用父组件中的方法
           },
-         decrement(){
-            this.$emit("decr");
-
+         decrement () {
+          this.$emit('decr')
         }
       }
-
     }
 </script>
 
