@@ -132,6 +132,8 @@
           axios.get(url).then((result)=>{
             let res = result.data;
             this.goodsList = res.products;
+            this.priceText = 'Price'
+            this.priceChecked = 'all'
           })
         },
         selectChange() {
