@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>This is the beginning page!!!!</h1>
+    <h1>Find your goods!</h1>
     <router-view class="main"></router-view>
   </div>
 </template>

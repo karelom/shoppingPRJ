@@ -13,7 +13,11 @@
             <select v-model="userSearch" @change="selectChange">
               <option v-for="list in itemLists" :value="list.key">{{ list.item }}</option>
             </select>
-            <input style="position: absolute; left: 30px; top: 230px;" v-model="userSearch">
+             <span>
+              <label for="search">Search:</label>
+              <input type="search" id="search" v-model="search" name="searchByName"  placeholder="Diary of a Wimpy Kid">
+              <input type="image"  src="./../../static/search.png" width="10px" height="10px" @click="searchByName">
+            </span>
             <span class="sortby">Sort by:</span>
             <a @click="sortDefault" href="javascript:void(0)" class="default cur">Default</a>
             <a @click="sortGoods" href="javascript:void(0)" class="price" >
@@ -71,6 +75,7 @@
         name: "GoodsList.vue",
       data(){
           return{
+            search: "",
             userSearch: "abcat0204000",
             itemLists: [
               { item: 'Headphone', key:'abcat0204000' },
@@ -120,6 +125,15 @@
         this.getGoodsList()
       },
       methods:{
+        searchByName(){
+          var name = this.search;
+          var url = "https://api.bestbuy.com/v1/products((search="+name+"))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json";
+          console.log(url);
+          axios.get(url).then((result)=>{
+            let res = result.data;
+            this.goodsList = res.products;
+          })
+        },
         selectChange() {
           this.getGoodsList()
           this.priceText = 'Price'
@@ -154,7 +168,7 @@
             switch (this.priceChecked) {
               case 0:
                 // console.log("执行了");
-                axios.get("https://api.bestbuy.com/v1/products(salePrice<=50&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                axios.get("https://api.bestbuy.com/v1/products(regularPrice<=50&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
                   let res = result.data;
                   this.goodsList = res.products;
                   if (this.goodsList.length == 0) {
@@ -164,7 +178,7 @@
                 this.priceText='Price'
                 break;
               case 1:
-                axios.get("https://api.bestbuy.com/v1/products(salePrice>50&salePrice<=100&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                axios.get("https://api.bestbuy.com/v1/products(regularPrice>50&regularPrice<=100&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
                   let res = result.data;
                   this.goodsList = res.products;
                   if (this.goodsList.length == 0) {
@@ -174,7 +188,7 @@
                 this.priceText='Price'
                 break;
               case 2:
-                axios.get("https://api.bestbuy.com/v1/products(salePrice>100&salePrice<=200&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                axios.get("https://api.bestbuy.com/v1/products(regularPrice>100&regularPrice<=200&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
                   let res = result.data;
                   this.goodsList = res.products;
                   if (this.goodsList.length == 0) {
@@ -184,7 +198,7 @@
                 this.priceText='Price'
                 break;
               case 3:
-                axios.get("https://api.bestbuy.com/v1/products(salePrice>200&salePrice<=500&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                axios.get("https://api.bestbuy.com/v1/products(regularPrice>200&regularPrice<=500&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
                   let res = result.data;
                   this.goodsList = res.products;
                   if (this.goodsList.length == 0) {
@@ -194,7 +208,7 @@
                 this.priceText='Price'
                 break;
               case 4:
-                axios.get("https://api.bestbuy.com/v1/products(salePrice>500&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
+                axios.get("https://api.bestbuy.com/v1/products(regularPrice>500&(categoryPath.id=" + this.userSearch + "))?apiKey=3zeu5z2as68z4r8d8gbscs2w&pageSize=16&format=json").then((result)=>{
                   let res = result.data;
                   this.goodsList = res.products;
                   if (this.goodsList.length == 0) {
